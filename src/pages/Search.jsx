@@ -184,8 +184,18 @@ export default function Search() {
         ) : results.length === 0 && !error ? (
           <div className="text-center py-16 text-gray-400">
             <p className="text-3xl mb-3">📭</p>
-            <p className="text-sm font-medium text-gray-600">Sin resultados para "{q}"</p>
-            <p className="text-xs mt-1">Prueba con otras palabras</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">Sin resultados para "{q}"</p>
+            <p className="text-xs mb-5">Búscalo directamente en MercadoLibre</p>
+            <a
+              href={`https://listado.mercadolibre.cl/${encodeURIComponent(q)}?matt_tool=afiliados&matt_word=ARROYOBRAULIO20230821195606`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-brand-orange text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-brand-dark transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/>
+              </svg>
+              Buscar "{q}" en MercadoLibre
+            </a>
           </div>
         ) : (
           <>
