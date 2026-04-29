@@ -8,8 +8,8 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 const ML_AFFILIATE_ID = process.env.ML_AFFILIATE_ID || 'ARROYOBRAULIO20230821195606'
-const ML_CLIENT_ID = process.env.ML_CLIENT_ID || ''
-const ML_CLIENT_SECRET = process.env.ML_CLIENT_SECRET || ''
+const ML_CLIENT_ID = process.env.ML_CLIENT_ID || '8853645291082124'
+const ML_CLIENT_SECRET = process.env.ML_CLIENT_SECRET || 'mqtJWyhuXXI7svSqnyAgzDLWWOnlkrje'
 
 app.use(cors({ origin: '*' }))
 app.use(express.json())
