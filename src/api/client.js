@@ -12,8 +12,11 @@ export function formatCLP(amount) {
   }).format(Math.round(amount))
 }
 
+const BASE = import.meta.env.VITE_API_URL || '/api'
+
 async function api(path, params = {}) {
-  const url = new URL('http://localhost:3001/api' + path)
+  const base = BASE.startsWith('http') ? BASE : window.location.origin + BASE
+  const url = new URL(base + path)
   Object.entries(params).forEach(([k, v]) => {
     if (v !== '' && v !== null && v !== undefined) url.searchParams.set(k, v)
   })
