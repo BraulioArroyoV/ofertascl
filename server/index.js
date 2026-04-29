@@ -129,6 +129,17 @@ app.get('/api/health', async (_, res) => {
   res.json({ status: 'ok', affiliateId: ML_AFFILIATE_ID, hasToken: !!token, timestamp: new Date().toISOString() })
 })
 
+
+app.get('/api/debug-env', (_, res) => {
+  res.json({
+    hasClientId: !!process.env.ML_CLIENT_ID,
+    hasClientSecret: !!process.env.ML_CLIENT_SECRET,
+    clientIdLength: (process.env.ML_CLIENT_ID || '').length,
+    clientSecretLength: (process.env.ML_CLIENT_SECRET || '').length,
+    hasToken: !!mlToken,
+    nodeEnv: process.env.NODE_ENV
+  })
+})
 getMLToken().then(() => {
   app.listen(PORT, () => {
     console.log(`\n OfertasCL Backend en http://localhost:${PORT}`)
