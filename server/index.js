@@ -267,14 +267,19 @@ const SEED = [
 function getSeedProducts(query = '') {
   if (!query) return SEED
   const q = query.toLowerCase()
+  const words = q.split(' ').filter(w => w.length > 2)
   const scored = SEED.map(p => {
     let score = 0
-    if (p.title.toLowerCase().includes(q)) score += 10
-    if (p.tags.some(t => t.includes(q))) score += 5
-    if (p.cat.includes(q)) score += 3
+    const title = p.title.toLowerCase()
+    if (title.includes(q)) score += 20
+    words.forEach(w => {
+      if (title.includes(w)) score += 8
+      if (p.tags.some(t => t.includes(w))) score += 4
+      if (p.cat.includes(w)) score += 2
+    })
     return { ...p, score }
   }).filter(p => p.score > 0).sort((a, b) => b.score - a.score)
-  return scored.length ? scored : SEED.slice(0, 20)
+  return scored
 }
 
 // ─── API ROUTES ─────────────────────────────────────────────────────────────
@@ -293,12 +298,18 @@ app.get('/api/search', async (req, res) => {
   }
 
   const all = getSeedProducts(q)
+  const mlFallbackUrl = `https://listado.mercadolibre.cl/${encodeURIComponent(q)}?matt_tool=afiliados&matt_word=${ML_AFFILIATE_ID}`
+
+  if (!all.length) {
+    return res.json({ query: q, total: 0, offset: 0, limit: 0, products: [], mlFallbackUrl, source: 'no_match' })
+  }
+
   let products = all.map(formatProduct)
   if (sort === 'price_asc') products.sort((a, b) => a.price - b.price)
   if (sort === 'price_desc') products.sort((a, b) => b.price - a.price)
   const off = Number(offset)
   const lim = Number(limit)
-  res.json({ query: q, total: products.length, offset: off, limit: lim, products: products.slice(off, off + lim), source: 'seed' })
+  res.json({ query: q, total: products.length, offset: off, limit: lim, products: products.slice(off, off + lim), mlFallbackUrl, source: 'seed' })
 })
 
 app.get('/api/deals', async (req, res) => {
